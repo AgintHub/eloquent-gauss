@@ -1,5 +1,5 @@
-dag_type: plain_text
-description: Analyze evolutionary tendencies in gene mapping from various perspectives.
+dag_type: typed
+description: Generated workflow from UI.
 name: evolutionary_tendencies_in_gene_mapping
 nodes:
   analyze_population_genetics_data:
@@ -9,8 +9,18 @@ nodes:
     name: analyze_population_genetics_data
     nodes_depended_on:
     - select_gene_mapping_methods
-    nodes_dependent_on:
-    - evaluate_genomic_diversity_across_species
+    nodes_dependent_on: []
+    output_structure:
+    - description: List of species included in the analysis
+      key: species_list
+      type: List[str]
+    - description: Text summary of observed gene variation patterns across species
+      key: variation_summary
+      type: str
+    - description: Quantitative or descriptive metrics summarizing genetic divergence
+        among the species
+      key: divergence_metrics
+      type: str
     prompt: Analyze existing data from population genetics studies on gene variation
       and divergence across different species, highlighting the implications for our
       understanding of gene evolution.
@@ -22,8 +32,23 @@ nodes:
     nodes_depended_on:
     - evaluate_genomic_diversity_across_species
     - select_gene_mapping_methods
-    nodes_dependent_on:
-    - draw_conclusions_on_gene_mapping_trends
+    nodes_dependent_on: []
+    output_structure:
+    - description: List of species analyzed in the comparison.
+      key: species_list
+      type: List[str]
+    - description: Text summary of the comparative genomic structure analysis.
+      key: genomic_comparison_summary
+      type: str
+    - description: Key observed trends in gene mapping across the species.
+      key: key_gene_mapping_trends
+      type: List[str]
+    - description: Species exhibiting the greatest genomic divergence.
+      key: species_with_highest_divergence
+      type: List[str]
+    - description: Gene mapping methods applied during the analysis.
+      key: mapping_method_used
+      type: List[str]
     prompt: Compare the overall genomic structure of different species and draw conclusions
       about the patterns and trends observed in gene mapping.
   draw_conclusions_on_gene_mapping_trends:
@@ -33,18 +58,44 @@ nodes:
     nodes_depended_on:
     - compare_genomic_structures_across_species
     nodes_dependent_on: []
+    output_structure:
+    - description: A list of concise conclusions about gene mapping evolutionary trends.
+      key: key_conclusions
+      type: List[str]
+    - description: A brief statement summarizing the overall implication for genetic
+        evolution.
+      key: overall_implication
+      type: str
+    - description: A confidence score (0 to 1) reflecting the strength of the conclusions.
+      key: confidence_score
+      type: float
     prompt: Based on the analysis, draw conclusions on the evolutionary tendencies
       observed in gene mapping, and their implications for our understanding of genetic
       evolution.
   evaluate_genomic_diversity_across_species:
     agent: false
-    description: Assess the role of genomic diversity in gene evolution.
+    description: Generate a structured assessment of genomic diversity across species,
+      highlighting its implications for gene evolution.
     name: evaluate_genomic_diversity_across_species
     nodes_depended_on:
     - analyze_population_genetics_data
     - understand_genetic_evolution_theories
-    nodes_dependent_on:
-    - compare_genomic_structures_across_species
+    nodes_dependent_on: []
+    output_structure:
+    - description: List of species examined in the assessment
+      key: species_list
+      type: List[str]
+    - description: Numeric scores representing genomic diversity for each species
+      key: diversity_scores
+      type: List[float]
+    - description: Key factors (e.g., gene regulation, epigenetics) influencing diversity
+        in each species
+      key: key_factors
+      type: List[str]
+    - description: Concise conclusions about how genomic diversity impacts gene evolution
+        across species
+      key: conclusion_summary
+      type: List[str]
     prompt: Assess genomic diversity across different species and examine how it informs
       our understanding of gene evolution, considering factors such as gene regulation
       and epigenetics.
@@ -55,8 +106,14 @@ nodes:
     nodes_depended_on:
     - select_gene_mapping_methods
     - understand_genetic_evolution_theories
-    nodes_dependent_on:
-    - analyze_population_genetics_data
+    nodes_dependent_on: []
+    output_structure:
+    - description: List of key factors that influence gene evolution
+      key: key_factors
+      type: List[str]
+    - description: Descriptions of each key factor
+      key: factor_descriptions
+      type: List[str]
     prompt: List the key factors that influence gene evolution, such as recombination,
       mutation, genetic hitchhiking, and population structure.
   select_gene_mapping_methods:
@@ -64,8 +121,15 @@ nodes:
     description: Select and briefly describe commonly used gene mapping methods.
     name: select_gene_mapping_methods
     nodes_depended_on: []
-    nodes_dependent_on:
-    - understand_genetic_evolution_theories
+    nodes_dependent_on: []
+    output_structure:
+    - description: A list of the names of the gene mapping methods identified.
+      key: method_names
+      type: List[str]
+    - description: A list of brief descriptions corresponding to each gene mapping
+        method listed in method_names.
+      key: method_descriptions
+      type: List[str]
     prompt: List and describe the most commonly used gene mapping methods, such as
       linkage analysis, physical mapping, and genetic linkage, without referencing
       any specific study.
@@ -75,5 +139,12 @@ nodes:
     name: understand_genetic_evolution_theories
     nodes_depended_on: []
     nodes_dependent_on: []
+    output_structure:
+    - description: Names of key genetic evolution concepts.
+      key: concept_names
+      type: List[str]
+    - description: Brief descriptions of each corresponding concept.
+      key: concept_descriptions
+      type: List[str]
     prompt: List and briefly describe key concepts related to genetic evolution, such
       as speciation, natural selection, genetic drift, and gene flow.

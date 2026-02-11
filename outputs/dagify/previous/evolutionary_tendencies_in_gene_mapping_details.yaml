@@ -1,0 +1,79 @@
+dag_type: plain_text
+description: Analyze evolutionary tendencies in gene mapping from various perspectives.
+name: evolutionary_tendencies_in_gene_mapping
+nodes:
+  analyze_population_genetics_data:
+    agent: false
+    description: Analyze data from existing population genetics studies on gene variation
+      and divergence.
+    name: analyze_population_genetics_data
+    nodes_depended_on:
+    - select_gene_mapping_methods
+    nodes_dependent_on:
+    - evaluate_genomic_diversity_across_species
+    prompt: Analyze existing data from population genetics studies on gene variation
+      and divergence across different species, highlighting the implications for our
+      understanding of gene evolution.
+  compare_genomic_structures_across_species:
+    agent: false
+    description: Analyze the genomic structure of various species and draw conclusions
+      on gene mapping trends.
+    name: compare_genomic_structures_across_species
+    nodes_depended_on:
+    - evaluate_genomic_diversity_across_species
+    - select_gene_mapping_methods
+    nodes_dependent_on:
+    - draw_conclusions_on_gene_mapping_trends
+    prompt: Compare the overall genomic structure of different species and draw conclusions
+      about the patterns and trends observed in gene mapping.
+  draw_conclusions_on_gene_mapping_trends:
+    agent: false
+    description: Conclude the findings on evolutionary tendencies in gene mapping.
+    name: draw_conclusions_on_gene_mapping_trends
+    nodes_depended_on:
+    - compare_genomic_structures_across_species
+    nodes_dependent_on: []
+    prompt: Based on the analysis, draw conclusions on the evolutionary tendencies
+      observed in gene mapping, and their implications for our understanding of genetic
+      evolution.
+  evaluate_genomic_diversity_across_species:
+    agent: false
+    description: Assess the role of genomic diversity in gene evolution.
+    name: evaluate_genomic_diversity_across_species
+    nodes_depended_on:
+    - analyze_population_genetics_data
+    - understand_genetic_evolution_theories
+    nodes_dependent_on:
+    - compare_genomic_structures_across_species
+    prompt: Assess genomic diversity across different species and examine how it informs
+      our understanding of gene evolution, considering factors such as gene regulation
+      and epigenetics.
+  identify_key_factors_affecting_gene_evolution:
+    agent: false
+    description: Identify the primary factors that drive gene evolution.
+    name: identify_key_factors_affecting_gene_evolution
+    nodes_depended_on:
+    - select_gene_mapping_methods
+    - understand_genetic_evolution_theories
+    nodes_dependent_on:
+    - analyze_population_genetics_data
+    prompt: List the key factors that influence gene evolution, such as recombination,
+      mutation, genetic hitchhiking, and population structure.
+  select_gene_mapping_methods:
+    agent: false
+    description: Select and briefly describe commonly used gene mapping methods.
+    name: select_gene_mapping_methods
+    nodes_depended_on: []
+    nodes_dependent_on:
+    - understand_genetic_evolution_theories
+    prompt: List and describe the most commonly used gene mapping methods, such as
+      linkage analysis, physical mapping, and genetic linkage, without referencing
+      any specific study.
+  understand_genetic_evolution_theories:
+    agent: false
+    description: Explain the fundamental principles of genetic evolution.
+    name: understand_genetic_evolution_theories
+    nodes_depended_on: []
+    nodes_dependent_on: []
+    prompt: List and briefly describe key concepts related to genetic evolution, such
+      as speciation, natural selection, genetic drift, and gene flow.
