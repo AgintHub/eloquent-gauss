@@ -1,40 +1,41 @@
 # select_gene_mapping_methods PRD
 
 ## Description
-Select and briefly describe commonly used gene mapping methods.
+Generate a concise catalog of commonly used gene mapping techniques, providing each method’s name and a brief description of its principle and typical application.
 
 
 ## Conceptual Info
 
-Provides a concise catalog of established gene mapping techniques, enabling downstream analysis nodes to reference the methods employed and understand their basic principles.
+This node collates a short list of well‑established gene‑mapping approaches, furnishing the name and a succinct explanatory note for each. The output can be used as reference material for downstream analysis nodes that require an understanding of the mapping techniques applied to the data.
 
 ## Docstring
 
 ### Summary
-Return a list of common gene mapping methods and a short description for each.
-
-### Parameters
-
-- **self** (Any): Instance of the node; not used in the function.
+Return a list of commonly used gene‑mapping methods with brief descriptions.
 
 ### Returns
 
-Dict[str, List[str]]: A dictionary with two keys: 'method_names' containing the names of the methods, and 'method_descriptions' containing concise explanations.
+List[Dict[str, str]]: A list of dictionaries, each containing two keys:
+
+* ``method_name`` – the name of the mapping method (str).
+* ``description`` – a concise explanation of how the method works and its typical use case (str).
 
 ### Raises
 
-- ValueError: If an internal error occurs while compiling the method list.
+- RuntimeError: Raised if the internal knowledge base fails to provide any mapping methods.
 
 ### Examples
 
 ```python
->>> output = select_gene_mapping_methods()
->>> print(output['method_names'])
-['Linkage Analysis', 'Physical Mapping', 'Genetic Linkage', 'Positional Cloning', 'Genome-Wide Association Study']
+>>> methods = select_gene_mapping_methods()
+>>> print(methods[0])
+{'method_name': 'Linkage Analysis', 'description': 'Uses recombination frequencies between genetic markers to infer their relative positions on a chromosome.'}
 ```
 
 ```python
->>> output = select_gene_mapping_methods()
->>> print(output['method_descriptions'][0])
-'Linkage Analysis: Determines relative positions of genes on a chromosome by studying inheritance patterns in families or pedigrees.'
+>>> methods = select_gene_mapping_methods()
+>>> for m in methods:
+...     print(f"- {m['method_name']}: {m['description']}")
+- Linkage Analysis: Uses recombination frequencies between genetic markers to infer their relative positions on a chromosome.
+- Physical Mapping: Determines the physical distances between genes or markers using techniques such as restriction mapping or fluorescence in situ hybridization (FISH).
 ```

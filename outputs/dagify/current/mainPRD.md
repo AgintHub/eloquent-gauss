@@ -11,7 +11,9 @@ PRDs for nodes in the 'evolutionary_tendencies_in_gene_mapping' module.
 
 - [draw_conclusions_on_gene_mapping_trends](#draw_conclusions_on_gene_mapping_trends)
 
-- [evaluate_genomic_diversity_across_species](#evaluate_genomic_diversity_across_species)
+- [evaluate_genomic_diversity_cretaceous](#evaluate_genomic_diversity_cretaceous)
+
+- [evaluate_genomic_diversity_dinosaurs](#evaluate_genomic_diversity_dinosaurs)
 
 - [identify_key_factors_affecting_gene_evolution](#identify_key_factors_affecting_gene_evolution)
 
@@ -26,29 +28,40 @@ PRDs for nodes in the 'evolutionary_tendencies_in_gene_mapping' module.
 ## analyze_population_genetics_data
 
 ### Description
-Analyze data from existing population genetics studies on gene variation and divergence.
+Analyzes genetic diversity patterns and divergence across species to identify evolutionary trends
 
 ### Conceptual Info
 
-This node analyzes population genetics data to understand gene variation and divergence across species.
+This node processes population genetics data from multiple species to quantify genetic diversity metrics, detect divergence patterns, and translate findings into evolutionary insights. It forms a critical bridge between raw genetic data and theoretical understanding by integrating with gene mapping methodologies.
 
 ### Docstring
 
-**Summary:** Analyzes existing population genetics data to summarize gene variation patterns and genetic divergence across species.
+**Summary:** Analyzes population genetics data to calculate diversity metrics, identify species trends, and determine evolutionary implications using selected gene mapping methods.
 
 **Parameters:**
 
-- gene_mapping_methods (List[str]): List of gene mapping methods selected and described in the parent node 'select_gene_mapping_methods'.
-**Returns:** {species_list: List[str], variation_summary: str, divergence_metrics: str} - A dictionary containing a list of species analyzed, a summary of gene variation patterns, and metrics of genetic divergence.
+- study_datasets (Dict[str, Dict]): Collection of population genetics datasets keyed by species
+- mapping_methods (List[Dict]): Selected gene mapping methods from select_gene_mapping_methods output
+- significance_threshold (float): p-value threshold for determining statistical significance (default: 0.05)
+**Returns:** Dict[str, Union[float, List, str, bool]] - Analysis results containing diversity metrics, species list, observed trends, implications summary, and divergence detection status
 
 **Raises:**
 
-- ValueError: If the input data from parent nodes is incomplete or improperly formatted.
+- ValueError: If datasets contain inconsistent genomic metadata across species
+- KeyError: If required genetic diversity metrics are missing from input datasets
 **Examples:**
 
 ```python
->>> analyze_population_genetics_data(gene_mapping_methods=['linkage_analysis', 'physical_mapping'])
-{'species_list': ['Homo sapiens', 'Mus musculus'], 'variation_summary': 'High genetic variation in coding regions', 'divergence_metrics': 'Average nucleotide divergence of 0.05'}
+>>> analyze_population_genetics_data({
+...   'panthera_tigris': {'diversity': 0.45, 'haplotypes': 120},
+...   'felis_catus': {'diversity': 0.32, 'haplotypes': 85}
+>>> }, [{'method_name': 'linkage_analysis', 'description': '...'}])
+{'average_genetic_diversity': 0.385, 'species_studied': ['panthera_tigris', 'felis_catus'], 'observed_trends': ['High haplotype diversity in big cats', 'Significant divergence in regulatory regions'], 'implications_summary': 'Supports adaptive evolution in feline species', 'significant_divergence_detected': True}
+```
+
+```python
+>>> analyze_population_genetics_data({}, [{'method_name': 'physical_mapping', 'description': '...'}])
+Traceback (most recent call last): ... ValueError: No datasets provided for analysis
 ```
 
 
@@ -58,57 +71,52 @@ This node analyzes population genetics data to understand gene variation and div
 ## compare_genomic_structures_across_species
 
 ### Description
-Analyze the genomic structure of various species and draw conclusions on gene mapping trends.
+Analyze the genomic structure of various species and draw conclusions on gene mapping trends
 
 ### Conceptual Info
 
-This node synthesizes genomic diversity metrics and gene mapping method outputs to produce a high‑level comparative report. It identifies structural differences across genomes, highlights recurrent mapping patterns, and flags species with exceptional divergence, thereby informing downstream evolutionary interpretation.
+The node aggregates genomic architecture metrics from dinosaur and Cretaceous period analyses, applies selected gene‑mapping methods, and produces a species‑level comparative summary highlighting structural conservation, rearrangement hotspots, and data reliability.
 
 ### Docstring
 
-**Summary:** Compare genomic structures across species and summarize gene‑mapping trends.
+**Summary:** Compare genomic structures across multiple species and identify key evolutionary trends.
 
 **Parameters:**
 
-- diversity_data (Dict[str, Any]): Output from `evaluate_genomic_diversity_across_species`, containing species list, diversity scores, key factors, and a conclusion summary.
-- mapping_methods (Dict[str, Any]): Output from `select_gene_mapping_methods`, listing available gene mapping methods and brief descriptions.
-**Returns:** Dict[str, Any] - A dictionary containing the species list, a narrative summary of genomic comparisons, key gene‑mapping trends, species with the highest divergence, and the mapping methods employed.
+- dinosaurs (dict): Output of evaluate_genomic_diversity_dinosaurs; contains species_list, diversity_index, and key_insights.
+- cretaceous (dict): Output of evaluate_genomic_diversity_cretaceous; contains genomic_diversity_factors, diversity_metrics, evolutionary_impact, supports_theories, and summary_assessment.
+- mapping_methods (list[dict]): Output of select_gene_mapping_methods; each dict contains method_name and description.
+**Returns:** dict - A dictionary with keys species_list (List[str]), comparison_summary (str), key_trends (List[str]), and data_quality_flag (bool).
 
 **Raises:**
 
-- ValueError: If either input dictionary is missing required keys or contains empty lists.
-- TypeError: If input types do not match expected structures.
+- ValueError: If any of the input dictionaries are missing required fields or are empty.
+- TypeError: If input types do not match the expected signatures.
 **Examples:**
 
 ```python
->>> diversity_data = {
-...     'species_list': ['Human', 'Chimpanzee', 'Mouse'],
-...     'diversity_scores': [0.1, 0.12, 0.3],
-...     'key_factors': ['gene regulation', 'epigenetics', 'mutation rate'],
-...     'conclusion_summary': ['High diversity in Mouse due to rapid mutation']
+>>> dinosaurs = {
+...     'species_list': ['Tyrannosaurus', 'Velociraptor'],
+...     'diversity_index': [0.23, 0.19],
+...     'key_insights': ['high intra‑species variation', 'low inter‑species divergence']
 >>> }
->>> mapping_methods = {
-...     'method_names': ['Linkage analysis', 'Physical mapping'],
-...     'method_descriptions': [
-...         'Analyzes recombination frequencies between markers',
-...         'Uses physical distances on chromosomes to map genes']
->>> }
-{\n  'species_list': ['Human', 'Chimpanzee', 'Mouse'],\n  'genomic_comparison_summary': 'Human and Chimpanzee share conserved synteny; Mouse shows extensive rearrangements.',\n  'key_gene_mapping_trends': ['Conserved linkage groups between primates', 'Higher breakpoint density in Mouse'],\n  'species_with_highest_divergence': ['Mouse'],\n  'mapping_method_used': ['Linkage analysis', 'Physical mapping']\n}
+>>> cretaceous = {
+...     'genomic_diversity_factors': ['epigenetic modifications'],
+...     'diversity_metrics': [0.15],
+...     'evolutionary_impact': ['adaptive radiation'],
+...     'supports_theories': True,
+...     'summary_assessment': 'moderate diversity with strong selection signals'"
+                "}
+>>> mapping_methods = [{'method_name': 'linkage analysis', 'description': 'Associates markers with phenotypes.'}]
+>>> result = compare_genomic_structures_across_species(dinosaurs, cretaceous, mapping_methods)
+>>> print(result['comparison_summary'])
+'The comparison indicates conserved synteny across most dinosaur genomes, with rearrangement hotspots near the 3ʹ ends of chromosomes. Cretaceous genomes exhibit moderate diversity driven by epigenetic changes, supporting adaptive radiation theories.'
 ```
 
 ```python
->>> # Handling missing diversity scores
->>> diversity_data = {
-...     'species_list': ['Human', 'Mouse'],
-...     'diversity_scores': [],
-...     'key_factors': ['mutation rate'],
-...     'conclusion_summary': []
->>> }
->>> mapping_methods = {
-...     'method_names': [],
-...     'method_descriptions': []
->>> }
-ValueError: Input dictionaries must contain non‑empty lists for species_list, diversity_scores, method_names, and method_descriptions.
+>>> result = compare_genomic_structures_across_species(dinosaurs, cretaceous, mapping_methods)
+>>> print(result['key_trends'])
+['Conserved synteny', 'Rearrangement hotspots', 'Epigenetic‑driven diversity']
 ```
 
 
@@ -118,96 +126,166 @@ ValueError: Input dictionaries must contain non‑empty lists for species_list, 
 ## draw_conclusions_on_gene_mapping_trends
 
 ### Description
-Conclude the findings on evolutionary tendencies in gene mapping.
+Synthesizes comparative genomic structure analyses into concise evolutionary conclusions, highlighting key trends and their broader implications.
 
 ### Conceptual Info
 
-This node draws conclusions on gene mapping evolutionary trends based on the analysis of genomic structures across species.
+This node aggregates the comparative genomic structure results from multiple species, extracting overarching evolutionary patterns in gene mapping. It distills these patterns into a human‑readable conclusion, a list of key trends, and a set of broader implications for genetic evolution theory.
 
 ### Docstring
 
-**Summary:** Draw conclusions on gene mapping evolutionary trends and their implications for genetic evolution.
+**Summary:** Generate a concise conclusion and implications from comparative genomic structure analyses.
 
 **Parameters:**
 
-- genomic_comparison_summary (str): Text summary of the comparative genomic structure analysis.
-- key_gene_mapping_trends (List[str]): Key observed trends in gene mapping across the species.
-**Returns:** dict - A dictionary containing the conclusions, overall implication, and confidence score.
+- species_list (List[str]): List of species that were compared in the genomic structure analysis.
+- comparison_summary (str): Narrative summary produced by the comparison node detailing differences and similarities in genomic architectures.
+- key_trends (List[str]): Primary evolutionary trends identified during the comparison (e.g., conserved synteny, chromosomal rearrangement hotspots).
+- data_quality_flag (bool): Flag indicating whether the underlying genomic data met quality thresholds for reliable comparison.
+**Returns:** dict - Dictionary containing three keys: "conclusion_text", "key_trends", and "implications". The types correspond to the node's output structure.
 
 **Raises:**
 
-- ValueError: If the input parameters are invalid or missing.
+- ValueError: If data_quality_flag is False, indicating unreliable input data.
+- TypeError: If any of the input parameters do not match the expected types.
 **Examples:**
 
 ```python
->>> conclusions = draw_conclusions_on_gene_mapping_trends(genomic_comparison_summary, key_gene_mapping_trends)
->>> print(conclusions)
-{'key_conclusions': ['Trend 1', 'Trend 2'], 'overall_implication': 'Implication', 'confidence_score': 0.8}
+>>> species_list = ["Anas platyrhynchos", "Gallus gallus", "Taeniopygia guttata"],
+>>> comparison_summary = "Across the three avian genomes, synteny is largely conserved, yet a notable translocation is present on chromosome 2 in the duck.",
+>>> key_trends = ["Conserved synteny", "Chromosomal translocation in duck"],
+>>> data_quality_flag = True
+>>> result = draw_conclusions_on_gene_mapping_trends(species_list, comparison_summary, key_trends, data_quality_flag)
+>>> print(result["conclusion_text"])
+>>> print(result["key_trends"])
+>>> print(result["implications"])
+"Conservation of synteny across the examined avian species suggests strong selective pressure to maintain genomic architecture, while the duck-specific translocation indicates lineage‑specific rearrangement events. These patterns imply that genome stability is a key evolutionary strategy, yet structural variation remains a mechanism for diversification.
+
+["Conserved synteny", "Chromosomal translocation in duck"]
+
+["Genome stability is a common selective pressure across avian lineages.", "Lineage‑specific rearrangements can drive rapid adaptation."]
+```
+
+```python
+>>> species_list = ["Homo sapiens", "Pan troglodytes", "Macaca mulatta"],
+>>> comparison_summary = "Human and chimpanzee genomes share extensive synteny, whereas macaque shows several inversions.",
+>>> key_trends = ["High synteny in primates", "Inversion hotspots in macaque"],
+>>> data_quality_flag = False
+>>> draw_conclusions_on_gene_mapping_trends(species_list, comparison_summary, key_trends, data_quality_flag)
+ValueError: Data quality insufficient for reliable conclusion generation.
 ```
 
 
 
 ---
 
-## evaluate_genomic_diversity_across_species
+## evaluate_genomic_diversity_cretaceous
 
 ### Description
-Generate a structured assessment of genomic diversity across species, highlighting its implications for gene evolution.
+This node synthesizes population genetics data and genetic evolution theory to produce a structured assessment of genomic diversity during the Cretaceous. It identifies key factors, quantifies diversity metrics, links findings to evolutionary theories, and evaluates support for parent-node theories, culminating in a concise summary.
 
 ### Conceptual Info
 
-This node synthesizes quantitative diversity metrics and qualitative evolutionary insights from population genetics data and core genetic theory, producing a concise, species‑level assessment of genomic diversity and its evolutionary significance.
+Provides a comprehensive evaluation of Cretaceous genomic diversity by integrating empirical data and theoretical frameworks, enabling downstream comparison of genomic structures across species.
 
 ### Docstring
 
-**Summary:** Evaluate genomic diversity across species and summarize implications for gene evolution.
+**Summary:** Evaluate the role of genomic diversity during the Cretaceous period and its implications for gene evolution.
 
 **Parameters:**
 
-- species_list (List[str]): List of species provided by the analyze_population_genetics_data node.
-- diversity_scores (List[float]): Pre‑computed diversity scores for each species, derived from population genetics analysis.
-- key_factors (List[str]): Key evolutionary factors (e.g., gene regulation, epigenetics) identified by understand_genetic_evolution_theories.
-**Returns:** dict - Dictionary matching the node’s output_structure: species_list, diversity_scores, key_factors, and conclusion_summary.
+- population_data (dict): Output dictionary from `analyze_population_genetics_data`, containing fields such as `average_genetic_diversity`, `species_studied`, `observed_trends`, `implications_summary`, and `significant_divergence_detected`.
+- evolution_theories (dict): Output dictionary from `understand_genetic_evolution_theories`, containing `concept_names` and `concept_descriptions`.
+**Returns:** dict - A dictionary with keys matching the node's output structure: `genomic_diversity_factors`, `diversity_metrics`, `evolutionary_impact`, `supports_theories`, and `summary_assessment`.
 
 **Raises:**
 
-- ValueError: Raised if input lists are of unequal length or if required data is missing.
+- ValueError: Raised if required fields are missing from either input dictionary.
 **Examples:**
 
 ```python
->>> output = evaluate_genomic_diversity_across_species(
-
-...     species_list=["Homo sapiens", "Mus musculus"],
-
-...     diversity_scores=[0.87, 0.65],
-
-...     key_factors=["gene regulation", "epigenetics"]
-
->>> )
-{
-  "species_list": ["Homo sapiens", "Mus musculus"],
-  "diversity_scores": [0.87, 0.65],
-  "key_factors": ["gene regulation", "epigenetics"],
-  "conclusion_summary": ["High diversity in H. sapiens reflects complex regulatory networks.", "Lower diversity in M. musculus suggests stronger selective sweeps."]
-}
+>>> population_data = {
+...     "average_genetic_diversity": 0.42,
+...     "species_studied": ["Triceratops", "Tyrannosaurus"],
+...     "observed_trends": ["high haplotype diversity"],
+...     "implications_summary": "Diverse populations suggest rapid adaptation.",
+...     "significant_divergence_detected": True
+>>> }
+>>> evolution_theories = {
+...     "concept_names": ["speciation", "genetic drift"],
+...     "concept_descriptions": ["Process of new species formation", "Random changes in allele frequencies"]
+>>> }
+>>> result = evaluate_genomic_diversity_cretaceous(population_data, evolution_theories)
+>>> print(result['summary_assessment'])
+"Cretaceous genomic diversity, marked by high haplotype variation and significant divergence, supports rapid speciation driven by both selection and drift, aligning with established evolutionary theories."
 ```
 
 ```python
->>> output = evaluate_genomic_diversity_across_species(
+>>> population_data = {
+...     "average_genetic_diversity": 0.15,
+...     "species_studied": ["Pachycephalosaurus"],
+...     "observed_trends": ["low diversity"],
+...     "implications_summary": "Limited variation implies bottleneck events.",
+...     "significant_divergence_detected": False
+>>> }
+>>> evolution_theories = {
+...     "concept_names": ["natural selection"],
+...     "concept_descriptions": ["Process by which advantageous traits become common"]
+>>> }
+>>> print(evaluate_genomic_diversity_cretaceous(population_data, evolution_theories)['supports_theories'])
+False
+```
 
-...     species_list=["Drosophila melanogaster"],
 
-...     diversity_scores=[0.92],
 
-...     key_factors=["epigenetics"]
+---
 
->>> )
-{
-  "species_list": ["Drosophila melanogaster"],
-  "diversity_scores": [0.92],
-  "key_factors": ["epigenetics"],
-  "conclusion_summary": ["D. melanogaster exhibits exceptionally high genomic diversity, indicating robust epigenetic modulation of gene expression."]
-}
+## evaluate_genomic_diversity_dinosaurs
+
+### Description
+Evaluate the genomic diversity observed in dinosaur populations, summarizing key metrics and implications for gene evolution.
+
+### Conceptual Info
+
+This node synthesizes raw population genetics data and evolutionary theory to quantify and interpret genomic diversity across dinosaur species, providing metrics that highlight evolutionary dynamics such as selection, drift, and epigenetic regulation.
+
+### Docstring
+
+**Summary:** Computes per‑species genomic diversity indices for dinosaurs and extracts evolutionary insights.
+
+**Parameters:**
+
+- average_genetic_diversity (float): Average genetic diversity metric from population genetics analysis (e.g., nucleotide diversity).
+- species_studied (List[str]): List of dinosaur species included in the analysis.
+- observed_trends (List[str]): Key trends observed in gene variation and divergence patterns.
+- implications_summary (str): Summary of how observed genetic diversity informs gene evolution theories.
+- concept_names (List[str]): Names of genetic evolution concepts relevant to the analysis.
+- concept_descriptions (List[str]): Brief descriptions of the concepts in concept_names.
+**Returns:** Tuple[List[str], List[float], List[str]] - A tuple containing the species list, corresponding diversity indices, and concise evolutionary insights.
+
+**Raises:**
+
+- ValueError: If input lists are of mismatched lengths or if required inputs are missing.
+- TypeError: If any input parameter is not of the expected type.
+**Examples:**
+
+```python
+>>> # Example 1: Simple synthetic data
+>>> species = ['Tyrannosaurus', 'Velociraptor', 'Stegosaurus']
+>>> diversity = [0.12, 0.09, 0.15]
+>>> insights = ["High diversity suggests rapid adaptive radiation", "Moderate diversity indicates stable niche", "Elevated diversity may reflect heterozygosity"]
+>>> result = evaluate_genomic_diversity_dinosaurs(0.1, species, ['trend1'], 'summary', ['selection'], ['Natural selection shapes diversity'])
+>>> print(result)
+(['Tyrannosaurus', 'Velociraptor', 'Stegosaurus'], [0.12, 0.09, 0.15], ['High diversity suggests rapid adaptive radiation', 'Moderate diversity indicates stable niche', 'Elevated diversity may reflect heterozygosity'])
+```
+
+```python
+>>> # Example 2: Error when lengths mismatch
+>>> try:
+...     evaluate_genomic_diversity_dinosaurs(0.1, ['Tyrannosaurus'], [], '', [], [])
+>>> except ValueError as e:
+...     print(str(e))
+"Input lists must have the same length. Provided species list has length 1 but diversity_index has length 0."
 ```
 
 
@@ -217,45 +295,35 @@ This node synthesizes quantitative diversity metrics and qualitative evolutionar
 ## identify_key_factors_affecting_gene_evolution
 
 ### Description
-Identify the primary factors that drive gene evolution.
+Identify the primary biological processes and demographic forces that drive changes in gene frequencies over time, producing a concise list of key factors.
 
 ### Conceptual Info
 
-This node synthesizes foundational evolutionary mechanisms and empirical insights to enumerate the main drivers of gene evolution. It leverages knowledge from gene mapping methods and genetic evolution theories to produce a concise list of factors and explanatory notes suitable for downstream analysis and educational material.
+This node extracts and compiles the fundamental drivers of gene evolution from the literature and conceptual frameworks provided by its parent nodes. It consolidates complex evolutionary mechanisms into a user‑friendly list that can be leveraged by downstream nodes for mapping strategies, hypothesis generation, or educational summaries.
 
 ### Docstring
 
-**Summary:** Generate a list of key biological factors that drive gene evolution and provide brief descriptions for each.
+**Summary:** Return a list of the primary biological factors that drive gene evolution.
 
 **Parameters:**
 
-- method_names (List[str]): Names of gene mapping methods obtained from the select_gene_mapping_methods node.
-- method_descriptions (List[str]): Short descriptions of each gene mapping method.
-- concept_names (List[str]): Names of core genetic evolution concepts from the understand_genetic_evolution_theories node.
-- concept_descriptions (List[str]): Brief explanations of each evolutionary concept.
-**Returns:** Dict[str, List[str]] - A dictionary containing two keys: 'key_factors', a list of factor names; and 'factor_descriptions', a list of corresponding brief descriptions.
+- input_text (str): Free‑text input that may contain a mixture of literature excerpts, theory summaries, or user prompts. The function processes this text to identify mentions of evolutionary mechanisms.
+**Returns:** List[str] - A list of concise, human‑readable factor names (e.g., "mutation", "recombination"). The order of items reflects their relative prominence as indicated by the input.
 
 **Raises:**
 
-- ValueError: If any of the input lists are empty or contain mismatched lengths.
+- ValueError: If input_text is an empty string or contains only whitespace.
+- RuntimeError: If the function cannot extract any valid factors after applying its parsing heuristics.
 **Examples:**
 
 ```python
->>> # Example inputs
->>> method_names = ["Linkage Analysis", "Physical Mapping", "Genetic Linkage"]
->>> method_descriptions = ["Analysis of recombination frequencies", "Construction of physical maps", "Study of gene co-segregation"]
->>> concept_names = ["Natural Selection", "Genetic Drift", "Gene Flow"]
->>> concept_descriptions = ["Differential survival and reproduction", "Random changes in allele frequencies", "Movement of genes between populations"]
->>> # Function call
->>> result = identify_key_factors_affecting_gene_evolution(
-...     method_names,
-...     method_descriptions,
-...     concept_names,
-...     concept_descriptions
->>> )
->>> # Expected output
->>> print(result)
-{'key_factors': ['Recombination', 'Mutation', 'Genetic Hitchhiking', 'Population Structure', 'Linkage Analysis', 'Physical Mapping', 'Genetic Linkage', 'Natural Selection', 'Genetic Drift', 'Gene Flow'], 'factor_descriptions': ['Exchange of genetic material during meiosis', 'Random changes in DNA sequence', 'Beneficial mutations carried along by linked genes', 'Variation in gene frequencies across populations', 'Analysis of recombination frequencies', 'Construction of physical maps', 'Study of gene co-segregation', 'Differential survival and reproduction', 'Random changes in allele frequencies', 'Movement of genes between populations']}
+>>> identify_key_factors_affecting_gene_evolution('Recombination, mutation, and genetic drift are central to evolution.')
+['recombination', 'mutation', 'genetic drift']
+```
+
+```python
+>>> identify_key_factors_affecting_gene_evolution('Population structure, natural selection, and gene flow shape genomes.')
+['population structure', 'natural selection', 'gene flow']
 ```
 
 
@@ -265,36 +333,38 @@ This node synthesizes foundational evolutionary mechanisms and empirical insight
 ## select_gene_mapping_methods
 
 ### Description
-Select and briefly describe commonly used gene mapping methods.
+Generate a concise catalog of commonly used gene mapping techniques, providing each method’s name and a brief description of its principle and typical application.
 
 ### Conceptual Info
 
-Provides a concise catalog of established gene mapping techniques, enabling downstream analysis nodes to reference the methods employed and understand their basic principles.
+This node collates a short list of well‑established gene‑mapping approaches, furnishing the name and a succinct explanatory note for each. The output can be used as reference material for downstream analysis nodes that require an understanding of the mapping techniques applied to the data.
 
 ### Docstring
 
-**Summary:** Return a list of common gene mapping methods and a short description for each.
+**Summary:** Return a list of commonly used gene‑mapping methods with brief descriptions.
 
-**Parameters:**
+**Returns:** List[Dict[str, str]] - A list of dictionaries, each containing two keys:
 
-- self (Any): Instance of the node; not used in the function.
-**Returns:** Dict[str, List[str]] - A dictionary with two keys: 'method_names' containing the names of the methods, and 'method_descriptions' containing concise explanations.
+* ``method_name`` – the name of the mapping method (str).
+* ``description`` – a concise explanation of how the method works and its typical use case (str).
 
 **Raises:**
 
-- ValueError: If an internal error occurs while compiling the method list.
+- RuntimeError: Raised if the internal knowledge base fails to provide any mapping methods.
 **Examples:**
 
 ```python
->>> output = select_gene_mapping_methods()
->>> print(output['method_names'])
-['Linkage Analysis', 'Physical Mapping', 'Genetic Linkage', 'Positional Cloning', 'Genome-Wide Association Study']
+>>> methods = select_gene_mapping_methods()
+>>> print(methods[0])
+{'method_name': 'Linkage Analysis', 'description': 'Uses recombination frequencies between genetic markers to infer their relative positions on a chromosome.'}
 ```
 
 ```python
->>> output = select_gene_mapping_methods()
->>> print(output['method_descriptions'][0])
-'Linkage Analysis: Determines relative positions of genes on a chromosome by studying inheritance patterns in families or pedigrees.'
+>>> methods = select_gene_mapping_methods()
+>>> for m in methods:
+...     print(f"- {m['method_name']}: {m['description']}")
+- Linkage Analysis: Uses recombination frequencies between genetic markers to infer their relative positions on a chromosome.
+- Physical Mapping: Determines the physical distances between genes or markers using techniques such as restriction mapping or fluorescence in situ hybridization (FISH).
 ```
 
 
@@ -304,37 +374,57 @@ Provides a concise catalog of established gene mapping techniques, enabling down
 ## understand_genetic_evolution_theories
 
 ### Description
-Explain the fundamental principles of genetic evolution by enumerating and summarizing core concepts.
+Explain the fundamental principles of genetic evolution by enumerating core concepts and providing concise descriptions for each.
 
 ### Conceptual Info
 
-This node provides a concise yet comprehensive overview of the foundational concepts that drive genetic evolution. The output is structured as paired lists of concept names and their short descriptions, enabling downstream nodes to incorporate these principles into analyses of genomic diversity and gene‑mapping trends.
+This node distills the foundational ideas that drive genetic change within and between populations. It produces a compact, paired list of concept names and their succinct explanations, serving as a knowledge base for downstream analyses of genomic data and evolutionary trends.
 
 ### Docstring
 
-**Summary:** Generate a list of core genetic evolution concepts and brief explanations for each.
+**Summary:** Generate a paired list of core genetic evolution concepts and their concise descriptions.
 
 **Parameters:**
 
-- prompt (str): A prompt requesting key genetic evolution concepts. The function interprets this prompt and produces a structured list of concepts.
-**Returns:** Dict[str, List[str]] - A dictionary with two keys: 'concept_names' (a list of concept titles) and 'concept_descriptions' (a list of one‑sentence descriptions corresponding to each name).
+- input_text (str): A prompt or instruction string requesting key genetic evolution concepts. The function ignores the content and uses a predefined set of concepts relevant to the prompt.
+**Returns:** Tuple[List[str], List[str]] - Two parallel lists: first contains concept names, second contains corresponding short descriptions.
 
 **Raises:**
 
-- ValueError: If the prompt is empty or not a string.
+- ValueError: If `input_text` is empty or None.
 **Examples:**
 
 ```python
->>> output = understand_genetic_evolution_theories(prompt='List key concepts of genetic evolution')
->>> print(output['concept_names'])
->>> print(output['concept_descriptions'])
-['Natural Selection', 'Genetic Drift', 'Gene Flow', 'Speciation']
-['Mechanism by which advantageous traits become more common in a population over successive generations.', 'Random changes in allele frequencies that can alter genetic variation.', 'Movement of alleles between populations through migration.', 'The process by which new species arise through divergence.']
+>>> names, descs = understand_genetic_evolution_theories('Explain key concepts')
+>>> print(names)
+>>> print(descs)
+[
+  'Speciation',
+  'Natural Selection',
+  'Genetic Drift',
+  'Gene Flow',
+  'Mutation',
+  'Recombination',
+  'Population Structure',
+  'Genetic Hitchhiking'
+]
+[
+  'The formation of new species through reproductive isolation.',
+  'Differential survival and reproduction of phenotypes.',
+  'Random fluctuations in allele frequencies.',
+  'Movement of alleles between populations.',
+  'Introduction of new genetic variants.',
+  'Exchange of genetic material during meiosis.',
+  'Distribution of individuals and genes in a population.',
+  'Increase in allele frequency due to linkage with a favorable allele.'
+]
 ```
 
 ```python
->>> output = understand_genetic_evolution_theories(prompt='')
->>> print(output)
-ValueError: Prompt must be a non-empty string.
+>>> names, descs = understand_genetic_evolution_theories('')
+>>> print(names)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: input_text must not be empty.
 ```
 

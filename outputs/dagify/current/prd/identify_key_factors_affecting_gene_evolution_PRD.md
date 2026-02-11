@@ -1,49 +1,39 @@
 # identify_key_factors_affecting_gene_evolution PRD
 
 ## Description
-Identify the primary factors that drive gene evolution.
+Identify the primary biological processes and demographic forces that drive changes in gene frequencies over time, producing a concise list of key factors.
 
 
 ## Conceptual Info
 
-This node synthesizes foundational evolutionary mechanisms and empirical insights to enumerate the main drivers of gene evolution. It leverages knowledge from gene mapping methods and genetic evolution theories to produce a concise list of factors and explanatory notes suitable for downstream analysis and educational material.
+This node extracts and compiles the fundamental drivers of gene evolution from the literature and conceptual frameworks provided by its parent nodes. It consolidates complex evolutionary mechanisms into a user‑friendly list that can be leveraged by downstream nodes for mapping strategies, hypothesis generation, or educational summaries.
 
 ## Docstring
 
 ### Summary
-Generate a list of key biological factors that drive gene evolution and provide brief descriptions for each.
+Return a list of the primary biological factors that drive gene evolution.
 
 ### Parameters
 
-- **method_names** (List[str]): Names of gene mapping methods obtained from the select_gene_mapping_methods node.
-- **method_descriptions** (List[str]): Short descriptions of each gene mapping method.
-- **concept_names** (List[str]): Names of core genetic evolution concepts from the understand_genetic_evolution_theories node.
-- **concept_descriptions** (List[str]): Brief explanations of each evolutionary concept.
+- **input_text** (str): Free‑text input that may contain a mixture of literature excerpts, theory summaries, or user prompts. The function processes this text to identify mentions of evolutionary mechanisms.
 
 ### Returns
 
-Dict[str, List[str]]: A dictionary containing two keys: 'key_factors', a list of factor names; and 'factor_descriptions', a list of corresponding brief descriptions.
+List[str]: A list of concise, human‑readable factor names (e.g., "mutation", "recombination"). The order of items reflects their relative prominence as indicated by the input.
 
 ### Raises
 
-- ValueError: If any of the input lists are empty or contain mismatched lengths.
+- ValueError: If input_text is an empty string or contains only whitespace.
+- RuntimeError: If the function cannot extract any valid factors after applying its parsing heuristics.
 
 ### Examples
 
 ```python
->>> # Example inputs
->>> method_names = ["Linkage Analysis", "Physical Mapping", "Genetic Linkage"]
->>> method_descriptions = ["Analysis of recombination frequencies", "Construction of physical maps", "Study of gene co-segregation"]
->>> concept_names = ["Natural Selection", "Genetic Drift", "Gene Flow"]
->>> concept_descriptions = ["Differential survival and reproduction", "Random changes in allele frequencies", "Movement of genes between populations"]
->>> # Function call
->>> result = identify_key_factors_affecting_gene_evolution(
-...     method_names,
-...     method_descriptions,
-...     concept_names,
-...     concept_descriptions
->>> )
->>> # Expected output
->>> print(result)
-{'key_factors': ['Recombination', 'Mutation', 'Genetic Hitchhiking', 'Population Structure', 'Linkage Analysis', 'Physical Mapping', 'Genetic Linkage', 'Natural Selection', 'Genetic Drift', 'Gene Flow'], 'factor_descriptions': ['Exchange of genetic material during meiosis', 'Random changes in DNA sequence', 'Beneficial mutations carried along by linked genes', 'Variation in gene frequencies across populations', 'Analysis of recombination frequencies', 'Construction of physical maps', 'Study of gene co-segregation', 'Differential survival and reproduction', 'Random changes in allele frequencies', 'Movement of genes between populations']}
+>>> identify_key_factors_affecting_gene_evolution('Recombination, mutation, and genetic drift are central to evolution.')
+['recombination', 'mutation', 'genetic drift']
+```
+
+```python
+>>> identify_key_factors_affecting_gene_evolution('Population structure, natural selection, and gene flow shape genomes.')
+['population structure', 'natural selection', 'gene flow']
 ```

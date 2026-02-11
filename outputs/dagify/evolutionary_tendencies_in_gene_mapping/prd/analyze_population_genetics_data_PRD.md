@@ -1,33 +1,44 @@
 # analyze_population_genetics_data PRD
 
 ## Description
-Analyze data from existing population genetics studies on gene variation and divergence.
+Analyzes genetic diversity patterns and divergence across species to identify evolutionary trends
 
 
 ## Conceptual Info
 
-This node analyzes population genetics data to understand gene variation and divergence across species.
+This node processes population genetics data from multiple species to quantify genetic diversity metrics, detect divergence patterns, and translate findings into evolutionary insights. It forms a critical bridge between raw genetic data and theoretical understanding by integrating with gene mapping methodologies.
 
 ## Docstring
 
 ### Summary
-Analyzes existing population genetics data to summarize gene variation patterns and genetic divergence across species.
+Analyzes population genetics data to calculate diversity metrics, identify species trends, and determine evolutionary implications using selected gene mapping methods.
 
 ### Parameters
 
-- **gene_mapping_methods** (List[str]): List of gene mapping methods selected and described in the parent node 'select_gene_mapping_methods'.
+- **study_datasets** (Dict[str, Dict]): Collection of population genetics datasets keyed by species
+- **mapping_methods** (List[Dict]): Selected gene mapping methods from select_gene_mapping_methods output
+- **significance_threshold** (float): p-value threshold for determining statistical significance (default: 0.05)
 
 ### Returns
 
-{species_list: List[str], variation_summary: str, divergence_metrics: str}: A dictionary containing a list of species analyzed, a summary of gene variation patterns, and metrics of genetic divergence.
+Dict[str, Union[float, List, str, bool]]: Analysis results containing diversity metrics, species list, observed trends, implications summary, and divergence detection status
 
 ### Raises
 
-- ValueError: If the input data from parent nodes is incomplete or improperly formatted.
+- ValueError: If datasets contain inconsistent genomic metadata across species
+- KeyError: If required genetic diversity metrics are missing from input datasets
 
 ### Examples
 
 ```python
->>> analyze_population_genetics_data(gene_mapping_methods=['linkage_analysis', 'physical_mapping'])
-{'species_list': ['Homo sapiens', 'Mus musculus'], 'variation_summary': 'High genetic variation in coding regions', 'divergence_metrics': 'Average nucleotide divergence of 0.05'}
+>>> analyze_population_genetics_data({
+...   'panthera_tigris': {'diversity': 0.45, 'haplotypes': 120},
+...   'felis_catus': {'diversity': 0.32, 'haplotypes': 85}
+>>> }, [{'method_name': 'linkage_analysis', 'description': '...'}])
+{'average_genetic_diversity': 0.385, 'species_studied': ['panthera_tigris', 'felis_catus'], 'observed_trends': ['High haplotype diversity in big cats', 'Significant divergence in regulatory regions'], 'implications_summary': 'Supports adaptive evolution in feline species', 'significant_divergence_detected': True}
+```
+
+```python
+>>> analyze_population_genetics_data({}, [{'method_name': 'physical_mapping', 'description': '...'}])
+Traceback (most recent call last): ... ValueError: No datasets provided for analysis
 ```

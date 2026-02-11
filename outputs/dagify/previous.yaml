@@ -1,4 +1,4 @@
-dag_type: plain_text
+dag_type: typed
 description: Generated workflow from UI.
 name: evolutionary_tendencies_in_gene_mapping
 nodes:
@@ -11,17 +11,20 @@ nodes:
     - select_gene_mapping_methods
     nodes_dependent_on: []
     output_structure:
-    - description: High-level summary of observed gene variation and divergence patterns
-      key: summary_findings
-      type: str
-    - description: Quantified divergence rates between species groups
-      key: divergence_rates
-      type: List[float]
-    - description: Names of species included in the population genetics analysis
-      key: species_analyzed
+    - description: Average genetic diversity metric calculated across studied populations
+      key: average_genetic_diversity
+      type: float
+    - description: List of species included in the population genetics analysis
+      key: species_studied
       type: List[str]
-    - description: Indicator of whether the analyzed data meets quality thresholds
-      key: is_data_valid
+    - description: Key observed trends in gene variation and divergence patterns
+      key: observed_trends
+      type: List[str]
+    - description: Summary of implications for gene evolution understanding
+      key: implications_summary
+      type: str
+    - description: Boolean indicator of statistically significant divergence detected
+      key: significant_divergence_detected
       type: bool
     prompt: Analyze existing data from population genetics studies on gene variation
       and divergence across different species, highlighting the implications for our
@@ -37,21 +40,20 @@ nodes:
     - select_gene_mapping_methods
     nodes_dependent_on: []
     output_structure:
-    - description: List of species analyzed for genomic structure comparison
-      key: species_compared
+    - description: List of species compared in this analysis
+      key: species_list
       type: List[str]
-    - description: Key genomic features evaluated across species (e.g., gene density,
-        regulatory regions)
-      key: genomic_features_analyzed
+    - description: Concise narrative summarizing key differences and similarities
+        in genomic structures
+      key: comparison_summary
+      type: str
+    - description: Primary trends or patterns identified across species (e.g., conserved
+        synteny, rearrangement hotspots)
+      key: key_trends
       type: List[str]
-    - description: Patterns identified in gene mapping across different species
-      key: observed_trends
-      type: List[str]
-    - description: Major conclusions or insights regarding gene mapping evolution
-      key: significant_findings
-      type: List[str]
-    - description: Whether observed trends align with known genetic evolution principles
-      key: is_consistent_with_evolutionary_theory
+    - description: Indicates whether the underlying genomic data meets quality thresholds
+        for reliable comparison
+      key: data_quality_flag
       type: bool
     prompt: Compare the overall genomic structure of different species and draw conclusions
       about the patterns and trends observed in gene mapping
@@ -63,23 +65,18 @@ nodes:
     - compare_genomic_structures_across_species
     nodes_dependent_on: []
     output_structure:
-    - description: Summary of the main evolutionary tendencies observed in gene mapping
-      key: conclusion_summary
+    - description: A concise textual summary of the main conclusions drawn from the
+        analysis.
+      key: conclusion_text
       type: str
-    - description: List of specific evolutionary patterns/trends identified across
-        species
-      key: key_evolutionary_tendencies
+    - description: A list of the most significant evolutionary trends identified in
+        gene mapping across species.
+      key: key_trends
       type: List[str]
-    - description: Explanation of how these findings impact understanding of genetic
-        evolution
-      key: implications_for_genetic_evolution
-      type: str
-    - description: List of genomic factors contributing to observed evolutionary tendencies
-      key: supporting_factors
+    - description: A list of implications these trends have for our broader understanding
+        of genetic evolution.
+      key: implications
       type: List[str]
-    - description: Whether significant evolutionary mapping trends were confirmed
-      key: trends_identified
-      type: bool
     prompt: Based on the analysis, draw conclusions on the evolutionary tendencies
       observed in gene mapping, and their implications for our understanding of genetic
       evolution.
@@ -91,34 +88,49 @@ nodes:
     - analyze_population_genetics_data
     - understand_genetic_evolution_theories
     nodes_dependent_on: []
+    output_structure:
+    - description: List of key factors influencing genomic diversity during the Cretaceous
+        (e.g., gene regulation, epigenetic mechanisms).
+      key: genomic_diversity_factors
+      type: List[str]
+    - description: Quantitative metrics of genomic diversity (e.g., nucleotide diversity
+        indices, haplotype variation scores).
+      key: diversity_metrics
+      type: List[float]
+    - description: Explanation of how observed diversity patterns relate to gene evolution
+        theories (speciation, drift, etc.).
+      key: evolutionary_impact
+      type: List[str]
+    - description: Whether the assessment supports existing genetic evolution theories
+        from parent nodes.
+      key: supports_theories
+      type: bool
+    - description: Concise summary of genomic diversity's role in shaping evolutionary
+        tendencies during the Cretaceous.
+      key: summary_assessment
+      type: str
     prompt: Assess genomic diversity during the Cretaceous period and examine how
       it informs our understanding of gene evolution, considering factors such as
       gene regulation and epigenetics.
   evaluate_genomic_diversity_dinosaurs:
     agent: false
-    description: Assess the role of genomic diversity in dinosaur gene evolution.
+    description: Evaluate the genomic diversity observed in dinosaur populations,
+      summarizing key metrics and implications for gene evolution.
     name: evaluate_genomic_diversity_dinosaurs
     nodes_depended_on:
     - analyze_population_genetics_data
     - understand_genetic_evolution_theories
     nodes_dependent_on: []
     output_structure:
-    - description: Quantitative measures of genomic diversity in dinosaur species
-        (e.g., heterozygosity indices, mutation rates)
-      key: diversity_metrics
-      type: List[float]
-    - description: Primary factors influencing genomic diversity in dinosaurs (e.g.,
-        gene regulation mechanisms, epigenetic patterns)
-      key: key_factors
+    - description: List of dinosaur species evaluated.
+      key: species_list
       type: List[str]
-    - description: Whether observed genomic diversity demonstrates statistically significant
-        variation relevant to evolutionary patterns
-      key: has_significant_diversity
-      type: bool
-    - description: Summary of how dinosaur genomic diversity patterns inform broader
-        understanding of gene evolution
-      key: evolutionary_implications
-      type: str
+    - description: Corresponding genomic diversity index for each species.
+      key: diversity_index
+      type: List[float]
+    - description: Concise insights linking diversity metrics to evolutionary processes.
+      key: key_insights
+      type: List[str]
     prompt: Assess genomic diversity in dinosaurs and examine how it informs our understanding
       of gene evolution, considering factors such as gene regulation and epigenetics.
   identify_key_factors_affecting_gene_evolution:
@@ -129,14 +141,26 @@ nodes:
     - select_gene_mapping_methods
     - understand_genetic_evolution_theories
     nodes_dependent_on: []
+    output_structure:
+    - description: A list of the main biological factors that influence gene evolution,
+        e.g., recombination, mutation, genetic hitchhiking, and population structure.
+      key: key_factors
+      type: List[str]
     prompt: List the key factors that influence gene evolution, such as recombination,
       mutation, genetic hitchhiking, and population structure.
   select_gene_mapping_methods:
     agent: false
-    description: Select and briefly describe commonly used gene mapping methods
+    description: Select and briefly describe commonly used gene mapping methods.
     name: select_gene_mapping_methods
     nodes_depended_on: []
     nodes_dependent_on: []
+    output_structure:
+    - description: Name of the gene mapping method
+      key: method_name
+      type: str
+    - description: Brief description of the method
+      key: description
+      type: str
     prompt: List and describe the most commonly used gene mapping methods, such as
       linkage analysis, physical mapping, and genetic linkage, without referencing
       any specific study.
@@ -146,5 +170,12 @@ nodes:
     name: understand_genetic_evolution_theories
     nodes_depended_on: []
     nodes_dependent_on: []
+    output_structure:
+    - description: Names of the key genetic evolution concepts.
+      key: concept_names
+      type: List[str]
+    - description: Brief descriptions for each corresponding concept.
+      key: concept_descriptions
+      type: List[str]
     prompt: List and briefly describe key concepts related to genetic evolution, such
       as speciation, natural selection, genetic drift, and gene flow.
